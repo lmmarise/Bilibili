@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:background="@drawable/status_bar_custom_bg"
+    android:fitsSystemWindows="true"
+    android:windowTranslucentStatus="true"
+    tools:context=".activity.MainActivity">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <per.goweii.actionbarex.ActionBarEx
+            android:id="@+id/action_bar_ex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_bar_custom_bg"
+            app:ab_bottomLineColor="@color/line"
+            app:ab_bottomLineHeight="0dp"
+            app:ab_foregroundLayerLayout="@layout/loading_bar"
+            app:ab_statusBarColor="@color/transparent"
+            app:ab_statusBarMode="dark"
+            app:ab_statusBarVisible="false"
+            app:ab_titleBarLayout="@layout/title_bar_custom" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/fragment_vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="-4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <RadioGroup
+            android:id="@+id/tabs_rg"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#dcdcdc"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <RadioButton
+                android:id="@+id/bilibili_tab"
+                style="@style/Custom.TabRadioButton"
+                android:checked="true"
+                android:drawableTop="@mipmap/bilibili_48x48"
+                android:text="@string/bilibili" />
+
+            <RadioButton
+                android:id="@+id/music_tab"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@mipmap/music_48x48"
+                android:text="@string/music" />
+
+            <RadioButton
+                android:id="@+id/lipstick_tab"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@mipmap/lipstick_48x48"
+                android:text="@string/lipstick" />
+
+            <RadioButton
+                android:id="@+id/my_tab"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@mipmap/my_48x48"
+                android:text="@string/my" />
+        </RadioGroup>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,8 @@
+include ':util'
+include ':pojo'
+include ':xpopup'
+include ':rxffmpeg'
+include ':app'
+project(':rxffmpeg').projectDir = new File(rootDir, 'RxFFmpeg-master/rxffmpeg/')
+project(':xpopup').projectDir = new File(rootDir, 'XPopup-master/library/')
+rootProject.name = "Bilibili缓存合并"

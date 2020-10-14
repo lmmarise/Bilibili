@@ -29,6 +29,7 @@ import org.tsb.bilibili.util.FileSizeUtil;
 import java.io.File;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +48,21 @@ public class BilibiliRecyclerViewAdapter extends RecyclerView.Adapter<BilibiliRe
     private final Context mContext;
     private ArrayList<VideoItem> mVideoItems;
     private Handler mHandlerT = new Handler();
+    private OnCheckedVideoItemListener mCheckVideoItemListener;
+    public static final List<VideoItem> mCheckedVideoItemList = new ArrayList<VideoItem>();
+
+    /**
+     * 勾选和取消勾选视频的监听器
+     */
+    public interface OnCheckedVideoItemListener {
+        void check();
+
+        void uncheck();
+    }
+
+    public void setMCheckVideoItemListener(OnCheckedVideoItemListener mCheckVideoItemListener) {
+        this.mCheckVideoItemListener = mCheckVideoItemListener;
+    }
 
     /**
      * @param videoItems 传给适配器数据
@@ -114,7 +130,14 @@ public class BilibiliRecyclerViewAdapter extends RecyclerView.Adapter<BilibiliRe
         // 设置当前item下的cb变化事件
         holder.mCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             mVideoItems.get(position).setCheck(isChecked);
-            // Log.d("NormalTextViewHolder", "[" + position + "]:" + isChecked);
+            // 将勾选的viewItem记录
+            if (isChecked) {
+                mCheckedVideoItemList.add(mVideoItems.get(position));
+                if (mCheckVideoItemListener != null) mCheckVideoItemListener.check();
+            } else {
+                mCheckedVideoItemList.remove(mVideoItems.get(position));
+                if (mCheckVideoItemListener != null) mCheckVideoItemListener.uncheck();
+            }
         });
     }
 
@@ -294,7 +317,6 @@ public class BilibiliRecyclerViewAdapter extends RecyclerView.Adapter<BilibiliRe
         long videoSize = (long) FileSizeUtil.getFileOrFilesSize(videoPath, BILIBILI.B);// KB单位的文件大小
         long vFitBitRate = AudioVideoUtils.getBitRate(vDuration, videoSize);// 获取视频码率
 
-
         // 存入信息对象
         videoInfo.setVWidth(vWidth)
                 .setVHeight(vHeight)
@@ -306,7 +328,6 @@ public class BilibiliRecyclerViewAdapter extends RecyclerView.Adapter<BilibiliRe
                 .setVSize(vSize)
                 .setVTrack(videoAndAudioTrack[0])
                 .setATrack(videoAndAudioTrack[1]);
-
         return videoInfo;
     }
 
@@ -315,6 +336,9 @@ public class BilibiliRecyclerViewAdapter extends RecyclerView.Adapter<BilibiliRe
         return mVideoItems == null ? 0 : mVideoItems.size();
     }
 
+    /**
+     * Bilibili recycleView的适配器
+     */
     public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_tv)
         TextView mTextView;
@@ -323,16 +347,19 @@ public class BilibiliRecyclerViewAdapter extends RecyclerView.Adapter<BilibiliRe
         @BindView(R.id.item_image)
         ImageView mImageView;
 
+        /**
+         * view是view_re_item, 是一行的view
+         */
         NormalTextViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            // 设置当前item的点击事件
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Log.d("NormalTextViewHolder", "--> " + getLayoutPosition());
-                }
-            });
+            bindOnClickListener(view);
+        }
+
+        /**
+         * 为recycle里面的item设置点击事件
+         */
+        private void bindOnClickListener(View view) {
         }
     }
 

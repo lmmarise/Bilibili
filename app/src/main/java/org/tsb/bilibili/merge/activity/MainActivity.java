@@ -1,23 +1,14 @@
 package org.tsb.bilibili.merge.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,15 +20,11 @@ import org.tsb.bilibili.merge.R;
 import org.tsb.bilibili.merge.constant.ENV;
 import org.tsb.bilibili.merge.fragment.BilibiliFragment;
 import org.tsb.bilibili.merge.fragment.BlankFragment;
-import org.tsb.bilibili.merge.utils.BackHandlerHelper;
-import org.tsb.bilibili.merge.utils.StatusBarUtil;
 import org.tsb.bilibili.pojo.AppVersion;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.jzvd.Jzvd;
 import per.goweii.actionbarex.ActionBarEx;
 
 /**
@@ -49,10 +36,8 @@ public class MainActivity extends BaseActivity {
 
     private ViewPager mViewPager;
     private RadioGroup mTabRadioGroup;
-
     private List<Fragment> mFragments;
     private FragmentPagerAdapter mAdapter;
-
     // 联网获取的当前app版本信息
     public static AppVersion appVersion = null;
 
@@ -95,6 +80,8 @@ public class MainActivity extends BaseActivity {
         // 给导航栏和帧布局容器注册监听器
         mViewPager.addOnPageChangeListener(mPageChangeListener);
         mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
+        // 设置viewPager的缓存个数
+        mViewPager.setOffscreenPageLimit(mFragments.size());
     }
 
     @Override

@@ -29,13 +29,11 @@ public class SimpleViewHolder extends BaseViewHolder<String> {
         mIsTvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 如果外界没有调用BaseAdapter.setOnClickListener()，
-                // listener就为null
-                if (listener == null) {
-                    return;
+                // 如果外界没有调用BaseAdapter.setOnClickListener()，listener就为null
+                if (listener != null) {
+                    // listener不为null就将这个事件传递给外界处理
+                    listener.onItemClick(itemValue, v.getId(), position);
                 }
-                // listener不为null就将这个事件传递给外界处理
-                listener.onItemClick(itemValue, v.getId(), position);
             }
         });
     }

@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -91,10 +93,21 @@ public class BilibiliFragment extends BaseFragment {
             // 修改actionBar
             getActivity().findViewById(R.id.iv_back).setVisibility(View.INVISIBLE);
             getActivity().findViewById(R.id.iv_download).setVisibility(View.INVISIBLE);
-            getActivity().findViewById(R.id.iv_delete).setVisibility(View.INVISIBLE);
             TextView tvTitle = getActivity().findViewById(R.id.tv_title);
             tvTitle.setText("缓存的视频");
+
+            ImageView ivDelete = getActivity().findViewById(R.id.iv_delete);
+            ImageView ivMenu = getActivity().findViewById(R.id.iv_menu);
+            // 判断是否有视频被勾选
+            if (BilibiliRecyclerViewAdapter.mCheckedVideoItemList.size() > 0) {
+                ivDelete.setVisibility(View.VISIBLE);
+                ivMenu.setVisibility(View.VISIBLE);
+            } else {
+                ivDelete.setVisibility(View.INVISIBLE);
+                ivMenu.setVisibility(View.INVISIBLE);
+            }
         }
+
     }
 
     @Override
@@ -126,6 +139,33 @@ public class BilibiliFragment extends BaseFragment {
         // 设置rv适配器
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new BilibiliRecyclerViewAdapter(context, mVideoItemList);
+        // 设置videoItem勾选事件
+        mAdapter.setMCheckVideoItemListener(new BilibiliRecyclerViewAdapter.OnCheckedVideoItemListener() {
+            @Override
+            public void check() {
+                actionBar();
+            }
+
+            @Override
+            public void uncheck() {
+                actionBar();
+            }
+
+            private void actionBar() {
+                FragmentActivity activity = BilibiliFragment.this.getActivity();
+                if (activity != null) {
+                    ImageView ivDelete = activity.findViewById(R.id.iv_delete);
+                    ImageView ivMenu = activity.findViewById(R.id.iv_menu);
+                    if (BilibiliRecyclerViewAdapter.mCheckedVideoItemList.size() > 0) {
+                        ivDelete.setVisibility(View.VISIBLE);
+                        ivMenu.setVisibility(View.VISIBLE);
+                    } else {
+                        ivDelete.setVisibility(View.INVISIBLE);
+                        ivMenu.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         // rv添加数据
         addData(context);
